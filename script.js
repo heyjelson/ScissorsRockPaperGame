@@ -1,36 +1,66 @@
-//generates random value for computer to choose.
-function computerChoice() {
-    const choices = ["paper", "rock", "scissor"];
+const buttons = document.querySelectorAll('.btn');
+const hRes = document.querySelector('.h_res');
+const cRes = document.querySelector('.c_res');
+const res = document.querySelector('h3');
+
+function comSelect() {
+    const choices = ['paper', 'rock', 'scissor'];
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
-//create variables to use in the playRound function.
-let computerSelection = computerChoice();
-let playerSelection;
-let playerScore = 0;
-let computerScore = 0;
-
-//create a function playRound to play the computerSelection and 
-//playerSelection variables.
-function playRound(playerSelection, computerSelection) {
-    if(playerSelection == "paper" && computerSelection == "rock" ||
-       playerSelection == "rock" && computerSelection == "scissor" ||
-       playerSelection == "scissor" && computerSelection == "paper") {
-        playerScore++;
-        console.log("You win! " + playerSelection + " beat " + computerSelection + ".");
-        console.log("Human score: " + playerScore);
-       }else if(playerSelection == computerSelection) {
-        console.log("It's a tie! Same selection.");
-       } else {
-        computerScore++;
-        console.log("You lose! " + computerSelection + " beat " + playerSelection + ".");
-        console.log("Computer score: " + computerScore);
-       }   
+function stopButtons() {
+    for(let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+    }
 }
 
+let hScore = 0;
+let cScore = 0;
+let human = "";
+let computer = "";
+
+function playGame(humanSelect) {
+    let computerSelect = comSelect();
+    let result = "";
+
+    if(humanSelect == 'paper' && computerSelect == 'rock' ||
+    humanSelect == 'rock' && computerSelect == 'scissor' ||
+    humanSelect == 'scissor' && computerSelect == 'paper') {
+        hScore += 1;
+        human = "Human: " + hScore;
+        result = "You win! " + humanSelect + " beat " + computerSelect + ".";
+        
+        if(hScore == 5) {
+            result = "Human score: " + hScore + " You won! Reload to play again.";
+            stopButtons();
+        }
+    } else if (humanSelect == computerSelect) {
+        result = "Tie! same selection.";
+    } else {
+        cScore += 1;
+        computer = "Computer: " + cScore;
+        result = "You lose! " + computerSelect + " beat " + humanSelect + ".";
+
+        if(cScore == 5) {
+            result = "Computer score: " + cScore + " You lost! Reload to play again.";
+            stopButtons();
+        }
+    }
+
+    hRes.textContent = human;
+    cRes.textContent = computer;
+    res.textContent = result;
+}
+
+buttons.forEach(button => {
+    button.addEventListener('click', function() {
+        playGame(button.value);
+    })
+});
+ 
 //create a function game and call the playRound function to play 5
 //rounds by looping, the one reach 3 points will win the game.
-function game() {
+/*function game() {
     let gameRounds = 5;
     let scoreToWin = 3;
 
@@ -53,7 +83,7 @@ function game() {
     } 
 }
 
-game();
+game();*/
 
 
 
